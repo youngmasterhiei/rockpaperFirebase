@@ -11,6 +11,7 @@ $(document).ready(function () {
     };
     firebase.initializeApp(config);
 
+
     var rock = "rock";
     var paper = "paper";
     var scissors = "scissors";
