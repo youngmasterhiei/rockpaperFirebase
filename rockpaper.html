@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+
 
 </head>
 
@@ -15,35 +17,37 @@
 
     <div id="wholePageDiv" class="container">
 
-        <div class="row ">
+        <div class="row col-lg-12">
             <form>
                 <input type='text' id='player' placeholder='Choose a username'>
                 <input type='submit' id='playerSubmit' value="Enter">
             </form>
         </div>
+        <div class="row col-lg-12">
+            <h1 id="winner"></h1>
+        </div>
         <div class="row">
             <div id="playerOneSide" class="col-lg-6">
                 <div>
-                    
+
                     <h1 id="playerOneName"></h1>
                 </div>
                 <button class="playerOneChoice">rock</button>
                 <button class="playerOneChoice">paper</button>
                 <button class="playerOneChoice">scissors</button>
-                <div id="displayPlayerOne">
+                <div id="displayPlayerOneChoice"></div>
+                <div id="playerOneStats"></div>
 
-                </div>
             </div>
             <div id="playerTwoSide" class="col-lg-6">
-                    <div>
-                            <h1 id="playerTwoName"></h1>
-                        </div>
+                <div>
+                    <h1 id="playerTwoName"></h1>
+                </div>
                 <button class="playerTwoChoice">rock</button>
                 <button class="playerTwoChoice">paper</button>
                 <button class="playerTwoChoice">scissors</button>
-                <div id="displayPlayerTwo">
-
-                </div>
+                <div id="displayPlayerTwoChoice"></div>
+                <div id="playerTwoStats"></div>
             </div>
 
         </div>
