@@ -63,7 +63,7 @@ $(document).ready(function () {
             $("#player").val("");
             refP2.set(players.playerTwo.name);
             buttonLockOn = false;
-            database.ref().update({buttonLockOn : buttonLockOn});
+            database.ref().update({ buttonLockOn: buttonLockOn });
             $("#playerOneButtons").hide();
         }
 
@@ -87,7 +87,7 @@ $(document).ready(function () {
         if (buttonLockOn) {
             alert("players must be chosen first");
         }
-        else if (!firstPlayerTurn){
+        else if (!firstPlayerTurn) {
             alert("waiting on player 2");
         }
         else {
@@ -99,8 +99,8 @@ $(document).ready(function () {
             firstPlayerTurn = false;
             secondPlayerTurn = true;
             database.ref().update({
-                firstPlayerTurn : firstPlayerTurn,
-                secondPlayerTurn : secondPlayerTurn
+                firstPlayerTurn: firstPlayerTurn,
+                secondPlayerTurn: secondPlayerTurn
             });
         }
     });
@@ -123,80 +123,75 @@ $(document).ready(function () {
             firstPlayerTurn = true;
             secondPlayerTurn = false;
             database.ref().update({
-                firstPlayerTurn : firstPlayerTurn,
-                secondPlayerTurn : secondPlayerTurn
+                firstPlayerTurn: firstPlayerTurn,
+                secondPlayerTurn: secondPlayerTurn
             });
         }
 
     });
 
-//updates stats to firebase based after the evaluateChoices function runs
-function firebaseUpdatePlayerStats(){
-    database.ref().update({
-        winner : winner,
-        statsP1 : statsP1,
-        statsP2 : statsP2
-    });
+    //updates stats to firebase based after the evaluateChoices function runs
+    function firebaseUpdatePlayerStats() {
+        statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
+        statsP2 = "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
+        database.ref().update({
+            winner: winner,
+            statsP1: statsP1,
+            statsP2: statsP2
+        });
 
 
-    database.ref("players/playerOne").update({
-        wins: players.playerOne.wins,
-        losses: players.playerOne.losses
-    });
-    database.ref("players/playerTwo").update({
-        wins: players.playerTwo.wins,
-        losses: players.playerTwo.losses
+        database.ref("players/playerOne").update({
+            wins: players.playerOne.wins,
+            losses: players.playerOne.losses
+        });
+        database.ref("players/playerTwo").update({
+            wins: players.playerTwo.wins,
+            losses: players.playerTwo.losses
 
-    });
-};
+        });
+    };
+
+    function playerOneWin() {
+        players.playerOne.wins++;
+        players.playerTwo.losses++;
+    };
 
 
     function evaluateChoices() {
-        
+
         if (players.playerOne.choice === rock && players.playerTwo.choice === scissors) {
             console.log(players.playerOne.name + " wins");
             winner = players.playerOne.name + " wins";
-            players.playerOne.wins++;
-            players.playerTwo.losses++;
-            statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
-            statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
+            playerOneWin();
             firebaseUpdatePlayerStats();
 
         }
         else if (players.playerOne.choice === paper && players.playerTwo.choice === rock) {
             console.log(players.playerOne.name + " wins");
-           winner = players.playerOne.name + " wins";
-            players.playerOne.wins++;
-            players.playerTwo.losses++;
-            statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
-            statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
+            winner = players.playerOne.name + " wins";
+            playerOneWin();
             firebaseUpdatePlayerStats();
 
         }
         else if (players.playerOne.choice === scissors && players.playerTwo.choice === paper) {
             console.log(players.playerOne.name + " wins");
             winner = players.playerOne.name + " wins";
-            players.playerOne.wins++;
-            players.playerTwo.losses++;
-            statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
-            statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
+            playerOneWin();
             firebaseUpdatePlayerStats();
 
         }
         else if (players.playerOne.choice === players.playerTwo.choice) {
             console.log("its a tie");
             winner = players.playerOne.name + " and " + players.playerTwo.name + " have tied";
-            statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
-            statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
             firebaseUpdatePlayerStats();
         }
         else {
             console.log(players.playerTwo.name + " wins");
-           winner =  players.playerTwo.name + " wins";
+            winner = players.playerTwo.name + " wins";
             players.playerTwo.wins++;
             players.playerOne.losses++;
-            statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
-            statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
+
             firebaseUpdatePlayerStats();
         }
 
@@ -236,17 +231,17 @@ function firebaseUpdatePlayerStats(){
         winner = "";
         var statsP1 = "";
         var statsP2 = "";
-        
+
 
         database.ref().set({
-            buttonLockOn : buttonLockOn,
+            buttonLockOn: buttonLockOn,
             firstPlayerChosen: firstPlayerChosen,
-            firstPlayerTurn : firstPlayerTurn,
-            secondPlayerTurn : secondPlayerTurn,
+            firstPlayerTurn: firstPlayerTurn,
+            secondPlayerTurn: secondPlayerTurn,
             players: players,
-            statsP1 : statsP1,
-            statsP2 : statsP2,
-            winner : winner
+            statsP1: statsP1,
+            statsP2: statsP2,
+            winner: winner
 
         });
 
@@ -259,7 +254,7 @@ function firebaseUpdatePlayerStats(){
 
         $("#playerOneName").text(snapshot.val().name);
         $("#displayPlayerOneChoice").text(snapshot.val().choice);
-        
+
         // $("#playerOneStats").text(snapshot.val().wins);
         // $("#playerOneStats").text(snapshot.val().losses);
 
