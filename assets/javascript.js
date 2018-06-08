@@ -286,13 +286,17 @@ $(document).ready(function () {
         firstPlayerTurn = true;
         secondPlayerTurn = false;
         winner = "";
+        var statsP1 = "";
+        var statsP2 = "";
 
         database.ref().set({
             buttonLockOn : buttonLockOn,
             firstPlayerChosen: firstPlayerChosen,
             firstPlayerTurn : firstPlayerTurn,
             secondPlayerTurn : secondPlayerTurn,
-            players: players
+            players: players,
+            statsP1 : statsP1,
+            statsP2 : statsP2
 
         });
 
