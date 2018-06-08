@@ -61,6 +61,7 @@ $(document).ready(function () {
             refP2.set(players.playerTwo.name);
             buttonLockOn = false;
             database.ref().update({buttonLockOn : buttonLockOn});
+            $("#playerOneButtons").hide();
         }
 
         else {
@@ -75,7 +76,7 @@ $(document).ready(function () {
                 firstPlayerChosen: firstPlayerChosen,
                 players: players
             });
-
+            $("#playerTwoButtons").hide();
         }
     });
 
@@ -133,8 +134,8 @@ $(document).ready(function () {
             $("#winner").html(players.playerOne.name + " wins");
             players.playerOne.wins++;
             players.playerTwo.losses++;
-            $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
-            $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
+            // $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
+            // $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
             database.ref("players/playerOne").update({
                 wins: players.playerOne.wins,
                 losses: players.playerOne.losses
@@ -151,8 +152,8 @@ $(document).ready(function () {
             $("#winner").html(players.playerOne.name + " wins");
             players.playerOne.wins++;
             players.playerTwo.losses++;
-            $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
-            $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
+            // $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
+            // $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
             database.ref("players/playerOne").update({
                 wins: players.playerOne.wins,
                 losses: players.playerOne.losses
@@ -169,8 +170,8 @@ $(document).ready(function () {
             $("#winner").html(players.playerOne.name + " wins");
             players.playerOne.wins++;
             players.playerTwo.losses++;
-            $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
-            $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
+            // $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
+            // $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
             database.ref("players/playerOne").update({
                 wins: players.playerOne.wins,
                 losses: players.playerOne.losses
@@ -185,8 +186,8 @@ $(document).ready(function () {
         else if (players.playerOne.choice === players.playerTwo.choice) {
             console.log("its a tie");
             $("#winner").html(players.playerOne.name + " and " + players.playerTwo.name + " have tied");
-            $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
-            $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
+            // $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
+            // $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
             database.ref("players/playerOne").update({
                 wins: players.playerOne.wins,
                 losses: players.playerOne.losses
@@ -202,8 +203,8 @@ $(document).ready(function () {
             $("#winner").html(players.playerTwo.name + " wins");
             players.playerTwo.wins++;
             players.playerOne.losses++;
-            $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
-            $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
+            // $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
+            // $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
 
             database.ref("players/playerOne").update({
                 wins: players.playerOne.wins,
