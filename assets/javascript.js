@@ -130,6 +130,27 @@ $(document).ready(function () {
 
     });
 
+//updates stats to firebase based after the evaluateChoices function runs
+function firebaseUpdatePlayerStats(){
+    database.ref().update({
+        winner : winner,
+        statsP1 : statsP1,
+        statsP2 : statsP2
+    });
+
+
+    database.ref("players/playerOne").update({
+        wins: players.playerOne.wins,
+        losses: players.playerOne.losses
+    });
+    database.ref("players/playerTwo").update({
+        wins: players.playerTwo.wins,
+        losses: players.playerTwo.losses
+
+    });
+};
+
+
     function evaluateChoices() {
         
         if (players.playerOne.choice === rock && players.playerTwo.choice === scissors) {
@@ -139,22 +160,7 @@ $(document).ready(function () {
             players.playerTwo.losses++;
             statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
             statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
-            database.ref().update({
-                winner : winner,
-                statsP1 : statsP1,
-                statsP2 : statsP2
-            });
-
-
-            database.ref("players/playerOne").update({
-                wins: players.playerOne.wins,
-                losses: players.playerOne.losses
-            });
-            database.ref("players/playerTwo").update({
-                wins: players.playerTwo.wins,
-                losses: players.playerTwo.losses
-
-            });
+            firebaseUpdatePlayerStats();
 
         }
         else if (players.playerOne.choice === paper && players.playerTwo.choice === rock) {
@@ -164,22 +170,7 @@ $(document).ready(function () {
             players.playerTwo.losses++;
             statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
             statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
-            database.ref().update({
-                winner : winner,
-                statsP1 : statsP1,
-                statsP2 : statsP2
-            });
-
-
-            database.ref("players/playerOne").update({
-                wins: players.playerOne.wins,
-                losses: players.playerOne.losses
-            });
-            database.ref("players/playerTwo").update({
-                wins: players.playerTwo.wins,
-                losses: players.playerTwo.losses
-
-            });
+            firebaseUpdatePlayerStats();
 
         }
         else if (players.playerOne.choice === scissors && players.playerTwo.choice === paper) {
@@ -189,21 +180,7 @@ $(document).ready(function () {
             players.playerTwo.losses++;
             statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
             statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
-            database.ref().update({
-                winner : winner,
-                statsP1 : statsP1,
-                statsP2 : statsP2
-            });
-
-            database.ref("players/playerOne").update({
-                wins: players.playerOne.wins,
-                losses: players.playerOne.losses
-            });
-            database.ref("players/playerTwo").update({
-                wins: players.playerTwo.wins,
-                losses: players.playerTwo.losses
-
-            });
+            firebaseUpdatePlayerStats();
 
         }
         else if (players.playerOne.choice === players.playerTwo.choice) {
@@ -211,21 +188,7 @@ $(document).ready(function () {
             winner = players.playerOne.name + " and " + players.playerTwo.name + " have tied";
             statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
             statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
-            database.ref().update({
-                winner : winner,
-                statsP1 : statsP1,
-                statsP2 : statsP2
-            });
-
-            database.ref("players/playerOne").update({
-                wins: players.playerOne.wins,
-                losses: players.playerOne.losses
-            });
-            database.ref("players/playerTwo").update({
-                wins: players.playerTwo.wins,
-                losses: players.playerTwo.losses
-
-            });
+            firebaseUpdatePlayerStats();
         }
         else {
             console.log(players.playerTwo.name + " wins");
@@ -234,22 +197,7 @@ $(document).ready(function () {
             players.playerOne.losses++;
             statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
             statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
-            database.ref().update({
-                winner : winner,
-                statsP1 : statsP1,
-                statsP2 : statsP2
-            });
-
-
-            database.ref("players/playerOne").update({
-                wins: players.playerOne.wins,
-                losses: players.playerOne.losses
-            });
-            database.ref("players/playerTwo").update({
-                wins: players.playerTwo.wins,
-                losses: players.playerTwo.losses
-
-            });
+            firebaseUpdatePlayerStats();
         }
 
     };
