@@ -45,6 +45,8 @@ $(document).ready(function () {
     var secondPlayerTurn = false;
 
     var winner = "";
+    var statsP1 = "";
+    var statsP2 = "";
 
 
 
@@ -129,15 +131,20 @@ $(document).ready(function () {
     });
 
     function evaluateChoices() {
-        debugger;
+        
         if (players.playerOne.choice === rock && players.playerTwo.choice === scissors) {
             console.log(players.playerOne.name + " wins");
             winner = players.playerOne.name + " wins";
             players.playerOne.wins++;
             players.playerTwo.losses++;
-            // $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
-            // $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
-            database.ref().update({winner : winner});
+            statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
+            statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
+            database.ref().update({
+                winner : winner,
+                statsP1 : statsP1,
+                statsP2 : statsP2
+            });
+
 
             database.ref("players/playerOne").update({
                 wins: players.playerOne.wins,
@@ -155,9 +162,14 @@ $(document).ready(function () {
            winner = players.playerOne.name + " wins";
             players.playerOne.wins++;
             players.playerTwo.losses++;
-            // $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
-            // $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
-            database.ref().update({winner : winner});
+            statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
+            statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
+            database.ref().update({
+                winner : winner,
+                statsP1 : statsP1,
+                statsP2 : statsP2
+            });
+
 
             database.ref("players/playerOne").update({
                 wins: players.playerOne.wins,
@@ -175,9 +187,14 @@ $(document).ready(function () {
             winner = players.playerOne.name + " wins";
             players.playerOne.wins++;
             players.playerTwo.losses++;
-            // $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
-            // $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
-            database.ref().update({winner : winner});
+            statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
+            statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
+            database.ref().update({
+                winner : winner,
+                statsP1 : statsP1,
+                statsP2 : statsP2
+            });
+
             database.ref("players/playerOne").update({
                 wins: players.playerOne.wins,
                 losses: players.playerOne.losses
@@ -192,9 +209,13 @@ $(document).ready(function () {
         else if (players.playerOne.choice === players.playerTwo.choice) {
             console.log("its a tie");
             winner = players.playerOne.name + " and " + players.playerTwo.name + " have tied";
-            // $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
-            // $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
-            database.ref().update({winner : winner});
+            statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
+            statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
+            database.ref().update({
+                winner : winner,
+                statsP1 : statsP1,
+                statsP2 : statsP2
+            });
 
             database.ref("players/playerOne").update({
                 wins: players.playerOne.wins,
@@ -211,9 +232,14 @@ $(document).ready(function () {
            winner =  players.playerTwo.name + " wins";
             players.playerTwo.wins++;
             players.playerOne.losses++;
-            // $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
-            // $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
-            database.ref().update({winner : winner});
+            statsP1 = "Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses;
+            statsP2 =  "Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses;
+            database.ref().update({
+                winner : winner,
+                statsP1 : statsP1,
+                statsP2 : statsP2
+            });
+
 
             database.ref("players/playerOne").update({
                 wins: players.playerOne.wins,
@@ -238,6 +264,8 @@ $(document).ready(function () {
 
         // Change the HTML
         $("#winner").html(snapshot.val().winner);
+        $("#playerOneStats").text(snapshot.val().statsP1);
+        $("#playerTwoStats").text(snapshot.val().statsP2);
         buttonLockOn = snapshot.val().buttonLockOn;
         firstPlayerChosen = snapshot.val().firstPlayerChosen;
         firstPlayerTurn = snapshot.val().firstPlayerTurn;
@@ -277,8 +305,9 @@ $(document).ready(function () {
 
         $("#playerOneName").text(snapshot.val().name);
         $("#displayPlayerOneChoice").text(snapshot.val().choice);
-        $("#playerOneStats").text(snapshot.val().wins);
-        $("#playerOneStats").text(snapshot.val().losses);
+        
+        // $("#playerOneStats").text(snapshot.val().wins);
+        // $("#playerOneStats").text(snapshot.val().losses);
 
     });
 
@@ -288,8 +317,8 @@ $(document).ready(function () {
 
         $("#playerTwoName").text(snapshot.val().name);
         $("#displayPlayerTwoChoice").text(snapshot.val().choice);
-        $("#playerTwoStats").text(snapshot.val().wins);
-        $("#playerTwoStats").text(snapshot.val().losses);
+        // $("#playerTwoStats").text(snapshot.val().wins);
+        // $("#playerTwoStats").text(snapshot.val().losses);
 
     });
 
