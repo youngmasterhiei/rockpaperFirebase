@@ -152,45 +152,41 @@ $(document).ready(function () {
         });
     };
 
-    function playerOneWin() {
-        players.playerOne.wins++;
-        players.playerTwo.losses++;
+
+
+    function selectWinner(player, winningPlayer, losingPlayer) {
+        winner = player + " wins";
+        winningPlayer;
+        losingPlayer;
+
     };
+
 
 
     function evaluateChoices() {
 
         if (players.playerOne.choice === rock && players.playerTwo.choice === scissors) {
-            console.log(players.playerOne.name + " wins");
-            winner = players.playerOne.name + " wins";
-            playerOneWin();
+            selectWinner(players.playerOne.name, players.playerOne.wins++, players.playerTwo.losses++);
             firebaseUpdatePlayerStats();
 
         }
         else if (players.playerOne.choice === paper && players.playerTwo.choice === rock) {
-            console.log(players.playerOne.name + " wins");
-            winner = players.playerOne.name + " wins";
-            playerOneWin();
+            selectWinner(players.playerOne.name, players.playerOne.wins++, players.playerTwo.losses++);
             firebaseUpdatePlayerStats();
 
         }
         else if (players.playerOne.choice === scissors && players.playerTwo.choice === paper) {
-            console.log(players.playerOne.name + " wins");
-            winner = players.playerOne.name + " wins";
-            playerOneWin();
+            selectWinner(players.playerOne.name, players.playerOne.wins++, players.playerTwo.losses++);
             firebaseUpdatePlayerStats();
 
         }
         else if (players.playerOne.choice === players.playerTwo.choice) {
-            console.log("its a tie");
             winner = players.playerOne.name + " and " + players.playerTwo.name + " have tied";
             firebaseUpdatePlayerStats();
         }
         else {
-            console.log(players.playerTwo.name + " wins");
-            winner = players.playerTwo.name + " wins";
-            players.playerTwo.wins++;
-            players.playerOne.losses++;
+            selectWinner(players.playerTwo.name, players.playerTwo.wins++, players.playerOne.losses++);
+
 
             firebaseUpdatePlayerStats();
         }
@@ -198,11 +194,6 @@ $(document).ready(function () {
     };
 
     database.ref().on("value", function (snapshot) {
-
-        // Print the initial data to the console.
-
-
-        // Log the value of the various properties
 
 
         // Change the HTML
