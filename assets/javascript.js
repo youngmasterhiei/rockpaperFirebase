@@ -1,4 +1,4 @@
-'use strict';
+
 $(document).ready(function () {
 
     // Initialize Firebase
@@ -30,7 +30,9 @@ $(document).ready(function () {
     };
 
     var database = firebase.database();
-    
+    var refP1 = database.ref("players/playerOne/name");
+    var refP2 = database.ref("players/playerTwo/name");
+
 
     var rock = "rock";
     var paper = "paper";
@@ -56,7 +58,7 @@ $(document).ready(function () {
         $("#displayPlayerOneChoice").text(players.playerOne.choice);
         database.ref().set({
             players: players,
-            });
+        });
         return players.playerOne.choice;
 
     });
@@ -67,10 +69,10 @@ $(document).ready(function () {
         $("#displayPlayerTwoChoice").text(players.playerTwo.choice);
         evaluateChoices();
         database.ref().set({
-            firstPlayerChosen : firstPlayerChosen,
+            firstPlayerChosen: firstPlayerChosen,
 
             players: players,
-            });
+        });
         return players.playerTwo.choice;
 
 
@@ -81,27 +83,25 @@ $(document).ready(function () {
         event.preventDefault();
         if (firstPlayerChosen) {
             players.playerTwo.name = $("#player").val().trim();
-            $("#playerTwoName").html("Player Two: " + players.playerTwo.name);
+
             console.log(players.playerTwo.name);
             $("#player").val("");
-            database.ref().set({
-                firstPlayerChosen : firstPlayerChosen,
-                players: players,
-                });
-
+            refP2.set(players.playerTwo.name);
 
         }
 
         else {
             players.playerOne.name = $("#player").val().trim();
-            $("#playerOneName").html("Player One: " + players.playerOne.name);
+
             firstPlayerChosen = true;
             console.log(players.playerOne.name);
             $("#player").val("");
-            database.ref().set({
-                firstPlayerChosen : firstPlayerChosen,
-              players: players,
-              });
+           
+           
+            database.ref().update({
+                firstPlayerChosen: firstPlayerChosen,
+                players: players
+            });
 
             return firstPlayerChosen;
         }
@@ -156,38 +156,45 @@ $(document).ready(function () {
 
     };
 
-    database.ref().on("value", function(snapshot) {
+    database.ref().on("value", function (snapshot) {
 
         // Print the initial data to the console.
-        console.log(snapshot.val());
-  
-        // Log the value of the various properties
-        console.log(snapshot.val().players.playerOne);
-        console.log(snapshot.val().players.playerTwo);
-  
-        // Change the HTML
-        $("#playerOneName").text(snapshot.val().players.playerOne.name);
-        $("#playerTwoName").text(snapshot.val().players.playerTwo.name);
 
+
+        // Log the value of the various properties
+
+
+        // Change the HTML
+
+
+        firstPlayerChosen = snapshot.val().firstPlayerChosen;
 
         // If any errors are experienced, log them to console.
-      }, function(errorObject) {
+    }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
-      });
+    });
 
-$("#nameReset").on("click", function(){
-players.playerOne.name = "";
-players.playerTwo.name = "";
-firstPlayerChosen = false;
+    $("#nameReset").on("click", function () {
+        players.playerOne.name = "";
+        players.playerTwo.name = "";
+        firstPlayerChosen = false;
 
-database.ref().set({
-    firstPlayerChosen : firstPlayerChosen,
-    players : players
-    
-  });
+        database.ref().set({
+            firstPlayerChosen: firstPlayerChosen,
+            players: players
 
-
-});
+        });
 
 
+    });
+
+    database.ref("players/playerOne").on("value", function (snapshot) {
+
+        $("#playerOneName").text(snapshot.val().name);
+    });
+
+    database.ref("players/playerTwo").on("value", function (snapshot) {
+
+        $("#playerTwoName").text(snapshot.val().name);
+    });
 });
