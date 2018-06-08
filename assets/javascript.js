@@ -288,6 +288,7 @@ $(document).ready(function () {
         winner = "";
         var statsP1 = "";
         var statsP2 = "";
+        
 
         database.ref().set({
             buttonLockOn : buttonLockOn,
@@ -296,7 +297,8 @@ $(document).ready(function () {
             secondPlayerTurn : secondPlayerTurn,
             players: players,
             statsP1 : statsP1,
-            statsP2 : statsP2
+            statsP2 : statsP2,
+            winner : winner
 
         });
 
