@@ -41,36 +41,17 @@ $(document).ready(function () {
 
     var firstPlayerChosen = false;
     var buttonLockOn = true;
-
-    console.log(players);
-
-
-
-    $(".playerOneChoice").on("click", function () {
-        players.playerOne.choice = $(this).text().trim();
-        console.log(players.playerOne.choice);
-        database.ref("players/playerOne").update({
-            choice: players.playerOne.choice
-        });
-
-    });
-
-    $(".playerTwoChoice").on("click", function () {
-        players.playerTwo.choice = $(this).text().trim();
-        console.log(players.playerTwo.choice);
-        evaluateChoices();
-        database.ref("players/playerTwo").update({
-
-            choice: players.playerTwo.choice
-        });
+    var firstPlayerTurn = true;
+    var secondPlayerTurn = false;
 
 
-    });
+
+
+
 
 
     $("#playerSubmit").on("click", function () {
         event.preventDefault();
-        console.log(players);
 
         if (firstPlayerChosen) {
             players.playerTwo.name = $("#player").val().trim();
@@ -78,7 +59,8 @@ $(document).ready(function () {
             console.log(players.playerTwo.name);
             $("#player").val("");
             refP2.set(players.playerTwo.name);
-
+            buttonLockOn = false;
+            database.ref().update({buttonLockOn : buttonLockOn});
         }
 
         else {
@@ -93,9 +75,55 @@ $(document).ready(function () {
                 firstPlayerChosen: firstPlayerChosen,
                 players: players
             });
-            console.log(players);
 
         }
+    });
+
+    $(".playerOneChoice").on("click", function () {
+        if (buttonLockOn) {
+            alert("players must be chosen first");
+        }
+        else if (!firstPlayerTurn){
+            alert("waiting on player 2");
+        }
+        else {
+            players.playerOne.choice = $(this).text().trim();
+            console.log(players.playerOne.choice);
+            database.ref("players/playerOne").update({
+                choice: players.playerOne.choice
+            });
+            firstPlayerTurn = false;
+            secondPlayerTurn = true;
+            database.ref().update({
+                firstPlayerTurn : firstPlayerTurn,
+                secondPlayerTurn : secondPlayerTurn
+            });
+        }
+    });
+
+    $(".playerTwoChoice").on("click", function () {
+        if (buttonLockOn) {
+            alert("players must be chosen first")
+        }
+        else if (!secondPlayerTurn) {
+            alert("waiting on player 1");
+        }
+        else {
+            players.playerTwo.choice = $(this).text().trim();
+            console.log(players.playerTwo.choice);
+            evaluateChoices();
+            database.ref("players/playerTwo").update({
+
+                choice: players.playerTwo.choice
+            });
+            firstPlayerTurn = true;
+            secondPlayerTurn = false;
+            database.ref().update({
+                firstPlayerTurn : firstPlayerTurn,
+                secondPlayerTurn : secondPlayerTurn
+            });
+        }
+
     });
 
     function evaluateChoices() {
@@ -200,8 +228,10 @@ $(document).ready(function () {
 
         // Change the HTML
 
-
+        buttonLockOn = snapshot.val().buttonLockOn;
         firstPlayerChosen = snapshot.val().firstPlayerChosen;
+        firstPlayerTurn = snapshot.val().firstPlayerTurn;
+        secondPlayerTurn = snapshot.val().secondPlayerTurn;
 
         // If any errors are experienced, log them to console.
     }, function (errorObject) {
@@ -214,9 +244,15 @@ $(document).ready(function () {
         players.playerOne.choice = "";
         players.playerTwo.choice = "";
         firstPlayerChosen = false;
+        buttonLockOn = true;
+        firstPlayerTurn = true;
+        secondPlayerTurn = false;
 
         database.ref().set({
+            buttonLockOn : buttonLockOn,
             firstPlayerChosen: firstPlayerChosen,
+            firstPlayerTurn : firstPlayerTurn,
+            secondPlayerTurn : secondPlayerTurn,
             players: players
 
         });
