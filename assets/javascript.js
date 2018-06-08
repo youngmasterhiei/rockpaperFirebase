@@ -38,42 +38,31 @@ $(document).ready(function () {
     var paper = "paper";
     var scissors = "scissors";
 
-    // var playerOne = "";
-    // var playerTwo = "";
-    // var playerOneChoice = "";
-    // var playerTwoChoice = "";
+
     var firstPlayerChosen = false;
+    var buttonLockOn = true;
 
-    // var playerOneWins = 0;
-    // var playerOneLosses = 0;
-    // var playerTwoWins = 0;
-    // var playerTwoLosses = 0;
-
+    console.log(players);
 
 
 
     $(".playerOneChoice").on("click", function () {
         players.playerOne.choice = $(this).text().trim();
         console.log(players.playerOne.choice);
-        $("#displayPlayerOneChoice").text(players.playerOne.choice);
-        database.ref().set({
-            players: players,
+        database.ref("players/playerOne").update({
+            choice: players.playerOne.choice
         });
-        return players.playerOne.choice;
 
     });
 
     $(".playerTwoChoice").on("click", function () {
         players.playerTwo.choice = $(this).text().trim();
         console.log(players.playerTwo.choice);
-        $("#displayPlayerTwoChoice").text(players.playerTwo.choice);
         evaluateChoices();
-        database.ref().set({
-            firstPlayerChosen: firstPlayerChosen,
+        database.ref("players/playerTwo").update({
 
-            players: players,
+            choice: players.playerTwo.choice
         });
-        return players.playerTwo.choice;
 
 
     });
@@ -81,6 +70,8 @@ $(document).ready(function () {
 
     $("#playerSubmit").on("click", function () {
         event.preventDefault();
+        console.log(players);
+
         if (firstPlayerChosen) {
             players.playerTwo.name = $("#player").val().trim();
 
@@ -96,18 +87,19 @@ $(document).ready(function () {
             firstPlayerChosen = true;
             console.log(players.playerOne.name);
             $("#player").val("");
-           
-           
+
+
             database.ref().update({
                 firstPlayerChosen: firstPlayerChosen,
                 players: players
             });
+            console.log(players);
 
-            return firstPlayerChosen;
         }
     });
 
     function evaluateChoices() {
+        debugger;
         if (players.playerOne.choice === rock && players.playerTwo.choice === scissors) {
             console.log(players.playerOne.name + " wins");
             $("#winner").html(players.playerOne.name + " wins");
@@ -115,6 +107,15 @@ $(document).ready(function () {
             players.playerTwo.losses++;
             $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
             $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
+            database.ref("players/playerOne").update({
+                wins: players.playerOne.wins,
+                losses: players.playerOne.losses
+            });
+            database.ref("players/playerTwo").update({
+                wins: players.playerTwo.wins,
+                losses: players.playerTwo.losses
+
+            });
 
         }
         else if (players.playerOne.choice === paper && players.playerTwo.choice === rock) {
@@ -124,7 +125,15 @@ $(document).ready(function () {
             players.playerTwo.losses++;
             $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
             $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
+            database.ref("players/playerOne").update({
+                wins: players.playerOne.wins,
+                losses: players.playerOne.losses
+            });
+            database.ref("players/playerTwo").update({
+                wins: players.playerTwo.wins,
+                losses: players.playerTwo.losses
 
+            });
 
         }
         else if (players.playerOne.choice === scissors && players.playerTwo.choice === paper) {
@@ -134,7 +143,15 @@ $(document).ready(function () {
             players.playerTwo.losses++;
             $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
             $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
+            database.ref("players/playerOne").update({
+                wins: players.playerOne.wins,
+                losses: players.playerOne.losses
+            });
+            database.ref("players/playerTwo").update({
+                wins: players.playerTwo.wins,
+                losses: players.playerTwo.losses
 
+            });
 
         }
         else if (players.playerOne.choice === players.playerTwo.choice) {
@@ -142,6 +159,15 @@ $(document).ready(function () {
             $("#winner").html(players.playerOne.name + " and " + players.playerTwo.name + " have tied");
             $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
             $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
+            database.ref("players/playerOne").update({
+                wins: players.playerOne.wins,
+                losses: players.playerOne.losses
+            });
+            database.ref("players/playerTwo").update({
+                wins: players.playerTwo.wins,
+                losses: players.playerTwo.losses
+
+            });
         }
         else {
             console.log(players.playerTwo.name + " wins");
@@ -151,7 +177,15 @@ $(document).ready(function () {
             $("#playerOneStats").html("Wins: " + players.playerOne.wins + "Losses: " + players.playerOne.losses);
             $("#playerTwoStats").html("Wins: " + players.playerTwo.wins + "Losses: " + players.playerTwo.losses);
 
+            database.ref("players/playerOne").update({
+                wins: players.playerOne.wins,
+                losses: players.playerOne.losses
+            });
+            database.ref("players/playerTwo").update({
+                wins: players.playerTwo.wins,
+                losses: players.playerTwo.losses
 
+            });
         }
 
     };
@@ -177,6 +211,8 @@ $(document).ready(function () {
     $("#nameReset").on("click", function () {
         players.playerOne.name = "";
         players.playerTwo.name = "";
+        players.playerOne.choice = "";
+        players.playerTwo.choice = "";
         firstPlayerChosen = false;
 
         database.ref().set({
@@ -189,12 +225,25 @@ $(document).ready(function () {
     });
 
     database.ref("players/playerOne").on("value", function (snapshot) {
+        players.playerOne.name = snapshot.val().name;
+        players.playerOne.choice = snapshot.val().choice;
 
         $("#playerOneName").text(snapshot.val().name);
+        $("#displayPlayerOneChoice").text(snapshot.val().choice);
+        $("#playerOneStats").text(snapshot.val().wins + snapshot.val().losses);
+
+
     });
 
     database.ref("players/playerTwo").on("value", function (snapshot) {
+        players.playerTwo.name = snapshot.val().name;
+        players.playerTwo.choice = snapshot.val().choice;
 
         $("#playerTwoName").text(snapshot.val().name);
+        $("#displayPlayerTwoChoice").text(snapshot.val().choice);
+        $("#playerTwoStats").text(snapshot.val().wins + snapshot.val().losses);
+
+
     });
+
 });
