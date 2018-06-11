@@ -11,7 +11,7 @@ $(document).ready(function () {
         messagingSenderId: "710075389000"
     };
     firebase.initializeApp(config);
-
+    // player 1 and 2 objects
     var players = {
         playerOne: {
             name: "name",
@@ -27,7 +27,7 @@ $(document).ready(function () {
             losses: 0,
         }
     };
-
+    // link firebase
     var database = firebase.database();
     var refP1 = database.ref("players/playerOne/name");
     var refP2 = database.ref("players/playerTwo/name");
@@ -35,7 +35,7 @@ $(document).ready(function () {
     var rock = "rock";
     var paper = "paper";
     var scissors = "scissors";
-
+    //switches for playing the game 
     var firstPlayerChosen = false;
     var secondPlayerChosen = false;
     var buttonLockOn = true;
@@ -43,11 +43,11 @@ $(document).ready(function () {
     var firstPlayerTurn = true;
     var secondPlayerTurn = false;
 
-
+    // used for stats and messaging 
     var winner = "";
     var statsP1 = "";
     var statsP2 = "";
-var userName = "";
+    var userName = "";
 
     // $(document).on("keyup", "#player", function (event) {
 
@@ -65,6 +65,7 @@ var userName = "";
     //     }
     // });
 
+// choose first or second player, hide the other button prevents a bug with usernamelock
     $("#selectPlayerOne").on("click", function () {
         if (firstPlayerChosen) {
             alert("Player one is already chosen");
@@ -173,20 +174,22 @@ var userName = "";
         }
 
     });
-    $("#messageSubmit").on("click", function () {
+    //messaging application 
+    $(document).on("click", "#messageSubmit", function () {
+        debugger;
         event.preventDefault();
 
         var message = userName + ": " + $("#playerMessage").val();
         //$("#messageArea").append(players.playerOne.name + ": " + message);
         $("#playerMessage").val("");
 
-        database.ref().update({
+        database.ref().push({
             message: message
         });
-      
+
     });
 
-    database.ref().on("value", function (snapshot) {
+    database.ref().on("child_added", function (snapshot) {
         $("#messageArea").append(snapshot.val().message + "\n");
 
     });
