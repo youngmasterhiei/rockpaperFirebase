@@ -1,3 +1,9 @@
 .username {
     align-content: center;
 }
+
+
+textarea {
+    width: 450px;
+    height: 200px;
+}

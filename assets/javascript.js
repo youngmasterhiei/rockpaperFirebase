@@ -39,21 +39,41 @@ $(document).ready(function () {
     var firstPlayerChosen = false;
     var secondPlayerChosen = false;
     var buttonLockOn = true;
+    var usernameLock = true;
     var firstPlayerTurn = true;
     var secondPlayerTurn = false;
+
 
     var winner = "";
     var statsP1 = "";
     var statsP2 = "";
+var userName = "";
+
+    // $(document).on("keyup", "#player", function (event) {
+
+    //     if (event.keyCode === 13) {
+    //         // Trigger the button element to submit using enter
+    //         $("#playerSubmit").click();
+    //     }
+    // });
+
+    // $(document).on("keyup", "#playerMessage", function (event) {
+
+    //     if (event.keyCode === 13) {
+    //         // Trigger the button element to submit using enter
+    //         $("#messageSubmit").click();
+    //     }
+    // });
 
     $("#selectPlayerOne").on("click", function () {
         if (firstPlayerChosen) {
             alert("Player one is already chosen");
         }
         else {
-        firstPlayerChosen = true;
-        $("#selectPlayerTwo").hide();
-        database.ref().update({ firstPlayerChosen: firstPlayerChosen });
+            firstPlayerChosen = true;
+            usernameLock = false;
+            $("#selectPlayerTwo").hide();
+            database.ref().update({ firstPlayerChosen: firstPlayerChosen });
         }
     });
 
@@ -63,18 +83,23 @@ $(document).ready(function () {
             alert("Player two is already chosen")
         }
         else {
-        secondPlayerChosen = true;
-        $("#selectPlayerOne").hide();
-        database.ref().update({ secondPlayerChosen: secondPlayerChosen });
+            secondPlayerChosen = true;
+            usernameLock = false;
+            $("#selectPlayerOne").hide();
+            database.ref().update({ secondPlayerChosen: secondPlayerChosen });
         }
 
     });
 
     $("#playerSubmit").on("click", function () {
         event.preventDefault();
+        if (usernameLock) {
+            alert("Please select a player");
+        }
 
-        if (secondPlayerChosen) {
+        else if (secondPlayerChosen) {
             players.playerTwo.name = $("#player").val().trim();
+            userName = $("#player").val().trim();
 
             console.log(players.playerTwo.name);
             $("#player").val("");
@@ -86,7 +111,7 @@ $(document).ready(function () {
 
         else if (firstPlayerChosen) {
             players.playerOne.name = $("#player").val().trim();
-
+            userName = $("#player").val().trim();
 
             console.log(players.playerOne.name);
             $("#player").val("");
@@ -148,6 +173,23 @@ $(document).ready(function () {
         }
 
     });
+    $("#messageSubmit").on("click", function () {
+        event.preventDefault();
+
+        var message = userName + ": " + $("#playerMessage").val();
+        //$("#messageArea").append(players.playerOne.name + ": " + message);
+        $("#playerMessage").val("");
+
+        database.ref().update({
+            message: message
+        });
+      
+    });
+
+    database.ref().on("value", function (snapshot) {
+        $("#messageArea").append(snapshot.val().message + "\n");
+
+    });
 
     $("#nameReset").on("click", function () {
         players.playerOne.name = "";
@@ -155,22 +197,31 @@ $(document).ready(function () {
         players.playerOne.choice = "";
         players.playerTwo.choice = "";
         firstPlayerChosen = false;
+        secondPlayerChosen = false;
         buttonLockOn = true;
         firstPlayerTurn = true;
         secondPlayerTurn = false;
         winner = "";
         var statsP1 = "";
         var statsP2 = "";
+        message = "";
+
+
+
 
         database.ref().set({
+
             buttonLockOn: buttonLockOn,
             firstPlayerChosen: firstPlayerChosen,
+            secondPlayerChosen: secondPlayerChosen,
             firstPlayerTurn: firstPlayerTurn,
             secondPlayerTurn: secondPlayerTurn,
             players: players,
             statsP1: statsP1,
             statsP2: statsP2,
-            winner: winner
+            winner: winner,
+            message: message
+
         });
     });
 
@@ -235,7 +286,9 @@ $(document).ready(function () {
         $("#winner").html(snapshot.val().winner);
         $("#playerOneStats").text(snapshot.val().statsP1);
         $("#playerTwoStats").text(snapshot.val().statsP2);
-        
+        // $("#messageArea").append(players.playerOne.name + snapshot.val().message + "\n");
+
+
         buttonLockOn = snapshot.val().buttonLockOn;
         firstPlayerChosen = snapshot.val().firstPlayerChosen;
         firstPlayerTurn = snapshot.val().firstPlayerTurn;
