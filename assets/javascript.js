@@ -37,6 +37,7 @@ $(document).ready(function () {
     var scissors = "scissors";
 
     var firstPlayerChosen = false;
+    var secondPlayerChosen = false;
     var buttonLockOn = true;
     var firstPlayerTurn = true;
     var secondPlayerTurn = false;
@@ -45,10 +46,34 @@ $(document).ready(function () {
     var statsP1 = "";
     var statsP2 = "";
 
+    $("#selectPlayerOne").on("click", function () {
+        if (firstPlayerChosen) {
+            alert("Player one is already chosen");
+        }
+        else {
+        firstPlayerChosen = true;
+        $("#selectPlayerTwo").hide();
+        database.ref().update({ firstPlayerChosen: firstPlayerChosen });
+        }
+    });
+
+
+    $("#selectPlayerTwo").on("click", function () {
+        if (secondPlayerChosen) {
+            alert("Player two is already chosen")
+        }
+        else {
+        secondPlayerChosen = true;
+        $("#selectPlayerOne").hide();
+        database.ref().update({ secondPlayerChosen: secondPlayerChosen });
+        }
+
+    });
+
     $("#playerSubmit").on("click", function () {
         event.preventDefault();
 
-        if (firstPlayerChosen) {
+        if (secondPlayerChosen) {
             players.playerTwo.name = $("#player").val().trim();
 
             console.log(players.playerTwo.name);
@@ -59,21 +84,23 @@ $(document).ready(function () {
             $("#playerOneButtons").hide();
         }
 
-        else {
+        else if (firstPlayerChosen) {
             players.playerOne.name = $("#player").val().trim();
 
-            firstPlayerChosen = true;
+
             console.log(players.playerOne.name);
             $("#player").val("");
 
 
             database.ref().update({
-                firstPlayerChosen: firstPlayerChosen,
                 players: players
             });
             $("#playerTwoButtons").hide();
         }
     });
+
+
+
 
     $(".playerOneChoice").on("click", function () {
         if (buttonLockOn) {
@@ -121,7 +148,7 @@ $(document).ready(function () {
         }
 
     });
-    
+
     $("#nameReset").on("click", function () {
         players.playerOne.name = "";
         players.playerTwo.name = "";
@@ -208,10 +235,12 @@ $(document).ready(function () {
         $("#winner").html(snapshot.val().winner);
         $("#playerOneStats").text(snapshot.val().statsP1);
         $("#playerTwoStats").text(snapshot.val().statsP2);
+        
         buttonLockOn = snapshot.val().buttonLockOn;
         firstPlayerChosen = snapshot.val().firstPlayerChosen;
         firstPlayerTurn = snapshot.val().firstPlayerTurn;
         secondPlayerTurn = snapshot.val().secondPlayerTurn;
+
 
         // If any errors are experienced, log them to console.
     }, function (errorObject) {
