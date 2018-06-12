@@ -17,10 +17,10 @@ textarea {
 .display {
     width: 450px;
     height: 200px;
-    background-color: lightgray;
-    border-width:4px;
+    background-color: white;
+    border-width:2px;
     border-style:solid;
-    border-color:darkgrey;
+    border-color:darkgray;
  
 }
 body {
@@ -29,4 +29,11 @@ body {
 }
 .bold{
     font-weight: bold;
+}
+.displayStyle {
+    font-size: 37px;
+    background-color: white;
+    border-width:2px;
+    border-style:solid;
+    border-color:darkgray;
 }
