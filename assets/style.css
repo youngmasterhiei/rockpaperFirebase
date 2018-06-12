@@ -21,6 +21,7 @@ textarea {
     border-width:2px;
     border-style:solid;
     border-color:darkgray;
+    padding-left: 6px;
  
 }
 body {

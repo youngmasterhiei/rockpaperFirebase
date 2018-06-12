@@ -43,6 +43,7 @@ $(document).ready(function () {
     var firstPlayerTurn = true;
     var secondPlayerTurn = false;
     var waitingForPlayers = true;
+    var playerHasWon = false;
 
     // used for stats and messaging 
     var winner = "";
@@ -66,7 +67,7 @@ $(document).ready(function () {
     //     }
     // });
 
-// choose first or second player, hide the other button prevents a bug with usernamelock
+    // choose first or second player, hide the other button prevents a bug with usernamelock
     $("#selectPlayerOne").on("click", function () {
         if (firstPlayerChosen) {
             alert("Player one is already chosen");
@@ -112,16 +113,16 @@ $(document).ready(function () {
             var displayTurn = $("#displayTurn").text(players.playerOne.name + "'s turn");
             waitingForPlayers = false;
 
-            database.ref().update({ buttonLockOn: buttonLockOn, waitingForPlayers : waitingForPlayers });
+            database.ref().update({ buttonLockOn: buttonLockOn, waitingForPlayers: waitingForPlayers });
             // database.ref().push()
-            
+
 
         }
 
         else if (firstPlayerChosen) {
             players.playerOne.name = $("#player").val().trim();
             var name = $("#player").val().trim();
-             userName = name.bold();
+            userName = name.bold();
 
             console.log(players.playerOne.name);
             $("#player").val("");
@@ -174,10 +175,10 @@ $(document).ready(function () {
 
                 choice: players.playerTwo.choice
             });
-            firstPlayerTurn = true;
+     
             secondPlayerTurn = false;
             database.ref().update({
-                firstPlayerTurn: firstPlayerTurn,
+                
                 secondPlayerTurn: secondPlayerTurn
             });
         }
@@ -186,7 +187,7 @@ $(document).ready(function () {
     //messaging application 
     $(document).on("click", "#messageSubmit", function () {
         event.preventDefault();
-        
+
 
         var message = userName + ": ".bold() + $("#playerMessage").val();
         //$("#messageArea").append(players.playerOne.name + ": " + message);
@@ -235,7 +236,7 @@ $(document).ready(function () {
             statsP2: statsP2,
             winner: winner,
             message: message,
-            waitingForPlayers : waitingForPlayers
+            waitingForPlayers: waitingForPlayers
 
         });
 
@@ -249,7 +250,8 @@ $(document).ready(function () {
         database.ref().update({
             winner: winner,
             statsP1: statsP1,
-            statsP2: statsP2
+            statsP2: statsP2,
+            playerHasWon : playerHasWon
         });
 
         database.ref("players/playerOne").update({
@@ -267,6 +269,16 @@ $(document).ready(function () {
         winner = player + " wins";
         winningPlayer;
         losingPlayer;
+        playerHasWon = true;
+        setTimeout(function(){           
+            playerHasWon = false;
+            firstPlayerTurn = true;
+            database.ref().update({
+                firstPlayerTurn: firstPlayerTurn,
+                playerHasWon : playerHasWon
+            });
+        }, 3200);
+
 
     };
 
@@ -296,11 +308,11 @@ $(document).ready(function () {
     };
 
     database.ref().on("value", function (snapshot) {
- 
-       
-       
+
+
+
         // Change the HTML
-        $("#winner").html(snapshot.val().winner);
+
         $("#playerOneStats").text(snapshot.val().statsP1);
         $("#playerTwoStats").text(snapshot.val().statsP2);
         // $("#messageArea").append(players.playerOne.name + snapshot.val().message + "\n");
@@ -311,18 +323,28 @@ $(document).ready(function () {
         firstPlayerTurn = snapshot.val().firstPlayerTurn;
         secondPlayerTurn = snapshot.val().secondPlayerTurn;
         waitingForPlayers = snapshot.val().waitingForPlayers;
+        playerHasWon = snapshot.val().playerHasWon;
         if (waitingForPlayers) {
             var displayTurn = $("#displayTurn").text("waiting for players...");
             $(displayTurn).addClass("displayStyle");
         }
-       else if(firstPlayerTurn){
-            var displayTurn = $("#displayTurn").text(players.playerOne.name + "'s turn");
+        else if (firstPlayerTurn) {
+            displayTurn = $("#displayTurn").text(players.playerOne.name + "'s turn");
             $(displayTurn).addClass("displayStyle");
-           }
-          else if(secondPlayerTurn){
-             displayTurn = $("#displayTurn").text(players.playerTwo.name + "'s turn");
+        }
+        else if (secondPlayerTurn) {
+            displayTurn = $("#displayTurn").text(players.playerTwo.name + "'s turn");
             $(displayTurn).addClass("displayStyle");
-           }
+
+        }
+        else if(playerHasWon) {
+            displayTurn = $("#displayTurn").html(snapshot.val().winner);
+            $(displayTurn).addClass("displayStyle");
+        }
+
+    
+          
+        
 
         // If any errors are experienced, log them to console.
     }, function (errorObject) {
