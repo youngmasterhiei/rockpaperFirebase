@@ -93,6 +93,8 @@ $(document).ready(function () {
     });
 
     $("#playerSubmit").on("click", function () {
+        debugger;
+
         event.preventDefault();
         if (usernameLock) {
             alert("Please select a player");
@@ -183,14 +185,14 @@ $(document).ready(function () {
         //$("#messageArea").append(players.playerOne.name + ": " + message);
         $("#playerMessage").val("");
 
-        database.ref().push({
+        database.ref("message").push({
             message: message
         });
 
     });
 
-    database.ref().on("child_added", function (snapshot) {
-        $("#messageArea").append(snapshot.val().message + "\n");
+    database.ref("message").on("child_added", function (snapshot) {
+        $("#messageArea").append(snapshot.val().message + "<br>");
 
     });
 
@@ -212,7 +214,7 @@ $(document).ready(function () {
 
 
 
-        database.ref().set({
+        database.ref().update({
 
             buttonLockOn: buttonLockOn,
             firstPlayerChosen: firstPlayerChosen,
@@ -226,6 +228,7 @@ $(document).ready(function () {
             message: message
 
         });
+
     });
 
 

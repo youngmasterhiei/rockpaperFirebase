@@ -14,3 +14,6 @@ textarea {
 #messageBox {
     margin-top: 5%;
 }
+.display {
+    display: block;
+}
