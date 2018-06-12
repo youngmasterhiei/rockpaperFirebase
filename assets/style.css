@@ -15,5 +15,18 @@ textarea {
     margin-top: 5%;
 }
 .display {
-    display: block;
+    width: 450px;
+    height: 200px;
+    background-color: lightgray;
+    border-width:4px;
+    border-style:solid;
+    border-color:darkgrey;
+ 
+}
+body {
+    background-image: url(images/circles-dark.png);
+
+}
+.bold{
+    font-weight: bold;
 }

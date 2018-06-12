@@ -93,7 +93,6 @@ $(document).ready(function () {
     });
 
     $("#playerSubmit").on("click", function () {
-        debugger;
 
         event.preventDefault();
         if (usernameLock) {
@@ -178,8 +177,8 @@ $(document).ready(function () {
     });
     //messaging application 
     $(document).on("click", "#messageSubmit", function () {
-        debugger;
         event.preventDefault();
+        $userName.css("font-weight", "bold")
 
         var message = userName + ": " + $("#playerMessage").val();
         //$("#messageArea").append(players.playerOne.name + ": " + message);
